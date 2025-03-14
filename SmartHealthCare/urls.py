@@ -16,7 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import patient.views as pviews
+import hospital.views as hviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+
+patient_Url = [
+    path('',pviews.landingpage,name='landingpage'),
+    path('diseaseform/',pviews.diseaseform,name='diseaseform'),
+]
+
+hospital_url = [
+    path('add_doctor/',hviews.add_doctor,name='add_doctor'),
+    path('view_doctor/',hviews.view_doctor,name='view_doctor'),
+    path('login/',hviews.login,name='login')
+]
+
+urlpatterns += patient_Url + hospital_url

@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'patient',
-    'hospital'
+    'hospital',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'SmartHealthCare.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / 'templates',BASE_DIR / 'bharatlearning/templates'],
+        'DIRS': [ BASE_DIR / 'templates',BASE_DIR / 'SmartHealthCare/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
