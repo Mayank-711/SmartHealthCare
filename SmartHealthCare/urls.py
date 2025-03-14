@@ -31,7 +31,10 @@ patient_Url = [
 hospital_url = [
     path('add_doctor/',hviews.add_doctor,name='add_doctor'),
     path('view_doctor/',hviews.view_doctor,name='view_doctor'),
-    path('login/',hviews.login,name='login')
+    path("login/", hviews.hospital_login, name="login"),
+    path("logout/", hviews.hospital_logout, name="logout"),
+    path('dashboard/',hviews.dashboard,name='dashboard'),
+    path('appointments/',hviews.appointments,name='appointments'),
 ]
 
 urlpatterns += patient_Url + hospital_url
