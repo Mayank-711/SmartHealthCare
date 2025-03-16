@@ -1,21 +1,100 @@
 {% extends "hospital/base.html" %}
 
-{% block title %}ViewDoctor - SmartHealth{% endblock %}
+{% block title %}View Doctor - SmartHealth{% endblock %}
 
 {% block extra_head %}
     <style>
         .dashboard-heading {
             color: #007bff;
             font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .add-doctor-btn {
+            margin-bottom: 20px;
+        }
+        .doctor-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .doctor-img {
+            width: 100%;
+            height: 280px; /* Adjust height as needed */
+            object-fit: contain; /* Show full image without cropping */
+            background-color: #f8f9fa; /* Optional: adds a background if the image has empty spaces */
+        }
+        
+        .doctor-card:hover {
+            transform: scale(1.05);
+        }
+       
+        .doctor-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .doctor-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .doctor-specialization {
+            font-size: 16px;
+            color: #007bff;
+            font-weight: 600;
+        }
+        .doctor-experience {
+            font-size: 14px;
+            color: #555;
+        }
+        .doctor-days {
+            font-size: 14px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .doctor-timings {
+            font-size: 14px;
+            color: #dc3545;
+        }
+        .card-actions {
+            padding: 10px;
+            text-align: center;
         }
     </style>
 {% endblock %}
 
 {% block content %}
-    <h2 class="dashboard-heading">Welcome to the ViewDoctor</h2>
-    <p>This is where you can manage everything.</p>
+    <h2 class="dashboard-heading">Welcome to View Doctor</h2>
+    <p>Manage all registered doctors here.</p>
+
+    <a href="{% url 'add_doctor' %}" class="btn btn-primary add-doctor-btn">Add Doctor</a>
+
+    <div class="row">
+        {% for doctor in doctors %}
+        <div class="col-md-4 mb-4">
+            <div class="doctor-card">
+                <img src="{{ doctor.photo.url }}" alt="Doctor Photo" class="doctor-img">
+                <div class="doctor-info">
+                    <p class="doctor-name">Dr.{{ doctor.name }}</p>
+                    <p class="doctor-specialization">{{ doctor.specialization }}</p>
+                    <p class="doctor-experience">Experience: {{ doctor.experience }} years</p>
+                    <p class="doctor-days">Available: {{ doctor.available_days }}</p>
+                    <p class="doctor-timings">
+                        Timings: {{ doctor.start_time|time:"h:i A" }} - {{ doctor.end_time|time:"h:i A" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No doctors available.</p>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block extra_scripts %}
- 
 {% endblock %}

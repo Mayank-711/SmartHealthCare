@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from SmartHealthCare import settings
 import patient.views as pviews
 import hospital.views as hviews
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,3 +40,6 @@ hospital_url = [
 ]
 
 urlpatterns += patient_Url + hospital_url
+
+if settings.DEBUG:  # Only for development
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,119 @@
+{% extends "hospital/base.html" %}
+
+{% block title %}Add Doctor - SmartHealth{% endblock %}
+
+{% block extra_head %}
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <h2 class="text-center mb-4">Add Doctor</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Doctor Name</label>
+                <input type="text" name="name" class="form-control" placeholder="Enter doctor's name" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Photo</label>
+                <input type="file" name="photo" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Experience (in years)</label>
+                <input type="number" name="experience" class="form-control" placeholder="Enter years of experience" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Specialization</label>
+                <select name="specialization" class="form-control" required>
+                    <option value="" selected disabled>Select Specialization</option>
+                    <option>Cardiologist</option>
+                    <option>Dentist</option>
+                    <option>Dermatologist</option>
+                    <option>Endocrinologist</option>
+                    <option>ENT Specialist</option>
+                    <option>Gastroenterologist</option>
+                    <option>General Physician</option>
+                    <option>Geriatrician</option>
+                    <option>Gynecologist</option>
+                    <option>Hematologist</option>
+                    <option>Immunologist</option>
+                    <option>Infectious Disease Specialist</option>
+                    <option>Nephrologist</option>
+                    <option>Neurologist</option>
+                    <option>Oncologist</option>
+                    <option>Ophthalmologist</option>
+                    <option>Orthopedic Surgeon</option>
+                    <option>Pediatrician</option>
+                    <option>Physiotherapist</option>
+                    <option>Plastic Surgeon</option>
+                    <option>Psychiatrist</option>
+                    <option>Pulmonologist</option>
+                    <option>Radiologist</option>
+                    <option>Rheumatologist</option>
+                    <option>Sports Medicine Specialist</option>
+                    <option>Urologist</option>
+                </select>
+            </div>
+            
+
+            <div class="mb-3">
+                <label class="form-label">Available Days</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="days" value="Monday"> Monday
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="days" value="Tuesday"> Tuesday
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="days" value="Wednesday"> Wednesday
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="days" value="Thursday"> Thursday
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="days" value="Friday"> Friday
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="days" value="Saturday"> Saturday
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="days" value="Sunday"> Sunday
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Timings From & To</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                    <input type="time" name="start_time" class="form-control" required>
+                </div>
+                <div class="input-group mt-2">
+                    <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                    <input type="time" name="end_time" class="form-control" required>
+                </div>
+            </div>
+            
+
+            <button type="submit" class="btn btn-primary w-100">Add Doctor</button>
+        </form>
+    </div>
+
+    
+{% endblock %}

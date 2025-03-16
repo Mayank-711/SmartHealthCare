@@ -3,14 +3,44 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
+from hospital.models import Doctor
 # Create your views here.
 
 
 def view_doctor(request):
-    return render(request,'hospital/view_doctor.html')
+    doctors = Doctor.objects.all()  # Fetch all doctors
+    context = {"doctors": doctors}  # Use lowercase key
+    return render(request, "hospital/view_doctor.html", context)
 
 def add_doctor(request):
-    return render(request,'hospital/add_doctor.html')
+    if request.method == "POST":
+        name = request.POST.get("name")
+        photo = request.FILES.get("photo")
+        experience = request.POST.get("experience")
+        specialization = request.POST.get("specialization")
+        available_days = request.POST.getlist("days")  # Gets selected checkboxes as a list
+        start_time = request.POST.get("start_time")
+        end_time = request.POST.get("end_time")
+
+        # Convert list of days into a comma-separated string
+        available_days_str = ", ".join(available_days)
+
+        # Save doctor to the database
+        Doctor.objects.create(
+            name=name,
+            photo=photo,
+            experience=experience,
+            specialization=specialization,
+            available_days=available_days_str,
+            start_time=start_time,
+            end_time=end_time
+        )
+
+        messages.success(request, "Doctor added successfully!")
+        return redirect("view_doctor")  # Redirect to doctor listing page
+
+    return render(request, "hospital/add_doctor.html")
 
 
 def appointments(request):

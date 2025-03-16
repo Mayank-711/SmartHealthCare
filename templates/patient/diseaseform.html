@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Form - Smart Health Care</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .form-label {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #007bff;
+        }
+        .btn-submit {
+            width: 100%;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #28a745;
+            transform: scale(1.05);
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background: #000;
+            color: #fff;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+        .marquee-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: red;
+            background: yellow;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Flashy Kachra: Moving Text -->
+    <marquee behavior="scroll" direction="left" scrollamount="10">
+        <span class="marquee-text">🚑 24/7 Emergency Care Available! 💉 Free Online Consultation for First-time Users! 🏥</span>
+    </marquee>
+
+    <!-- Disease Form -->
+    <div class="container">
+        <h2 class="text-center mb-4" style="color: #ff4500; font-weight: bold;">
+            🤒 Disease Prediction Form 💊
+        </h2>
+        <p class="text-center text-success fw-bold">Get instant AI-based diagnosis and expert recommendations! 🚀</p>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Enter Your Details 👇</label>
+                <textarea class="form-control" name="user_input" rows="4" placeholder="Mention your Gender, Age, and Problem" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-submit">🔍 Submit & Get Diagnosis</button>
+        </form>
+        
+    </div>
+
+    <!-- More Kachra: Random Healthcare Tips -->
+    <div class="text-center mt-4">
+        <h3 style="color: #dc3545;">🩺 Health Tips of the Day 🏋️‍♂️</h3>
+        <ul class="list-group w-50 mx-auto">
+            <li class="list-group-item list-group-item-success">Drink 8 glasses of water daily! 💧</li>
+            <li class="list-group-item list-group-item-warning">Avoid junk food, eat fresh! 🍏</li>
+            <li class="list-group-item list-group-item-danger">Exercise for at least 30 minutes! 🏃</li>
+            <li class="list-group-item list-group-item-info">Sleep for 7-8 hours! 💤</li>
+            <li class="list-group-item list-group-item-primary">Wash hands frequently! 🧼</li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2025 SmartHealthCare™ | Your AI Doctor 🤖 | All Rights Reserved
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
