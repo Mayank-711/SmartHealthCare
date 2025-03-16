@@ -28,6 +28,7 @@ urlpatterns = [
 patient_Url = [
     path('',pviews.landingpage,name='landingpage'),
     path('diseaseform/',pviews.diseaseform,name='diseaseform'),
+    path("seedoctors/", pviews.seedoctors, name="seedoctors"), 
 ]
 
 hospital_url = [
