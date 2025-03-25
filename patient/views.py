@@ -138,6 +138,7 @@ def diseaseform(request):
                         "- If the symptoms are in Hindi, **translate them to English** before processing.\n"
                         "- Do **not** include '```' or the word 'json' in the response.\n"
                         "- You can suggest multiple diseases, doctors, and precautions."
+                        " if skin disease , see a doctor"
                     ],
                 }]
             )
