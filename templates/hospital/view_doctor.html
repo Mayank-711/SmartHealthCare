@@ -1,107 +1,422 @@
 {% extends "hospital/base.html" %}
 
-{% block title %}View Doctor - SmartHealth{% endblock %}
+{% block title %}Our Medical Team - SmartHealth{% endblock %}
 
 {% block extra_head %}
     <style>
-        .dashboard-heading {
-            color: #007bff;
-            font-size: 24px;
-            margin-bottom: 20px;
+        .page-header {
+            background: linear-gradient(135deg, rgb(47, 85, 142), #084298);
+            color: white;
+            padding: 2rem 0;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        .add-doctor-btn {
-            margin-bottom: 20px;
+        .dashboard-heading {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .search-filter-container {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         .doctor-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
+            border: none;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-            background: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 123, 255, 0.15);
+        }
+        .doctor-img-container {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+            background-color: #f1f5f9;
+        }
+        .doctor-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .doctor-card:hover .doctor-img {
+            transform: scale(1.05);
+        }
+        .specialization-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 123, 255, 0.9);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+        .doctor-info {
+            padding: 1.5rem;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
-        
-        .doctor-img {
-            width: 100%;
-            height: 280px; /* Adjust height as needed */
-            object-fit: contain; /* Show full image without cropping */
-            background-color: #f8f9fa; /* Optional: adds a background if the image has empty spaces */
+        .doctor-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.4rem;
         }
-        
-        .doctor-card:hover {
-            transform: scale(1.05);
+        .doctor-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
         }
-       
-        .doctor-info {
-            padding: 15px;
+        .doctor-meta i {
+            margin-right: 0.4rem;
+            color:rgb(47, 85, 142);
+            width: 1.2rem;
             text-align: center;
         }
-        .doctor-name {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
+        .availability-info {
+            background: #e8f4ff;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            margin-top: auto;
         }
-        .doctor-specialization {
-            font-size: 16px;
-            color: #007bff;
+        .availability-title {
+            font-weight: 600;
+            color: rgb(47, 85, 142);
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+        .availability-days {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .day-badge {
+            background: rgb(47, 85, 142);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
             font-weight: 600;
         }
-        .doctor-experience {
-            font-size: 14px;
-            color: #555;
-        }
-        .doctor-days {
-            font-size: 14px;
-            font-weight: bold;
-            color: #28a745;
-        }
-        .doctor-timings {
-            font-size: 14px;
-            color: #dc3545;
-        }
         .card-actions {
-            padding: 10px;
+            display: flex;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            gap: 0.5rem;
+        }
+        .card-btn {
+            flex: 1;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card-btn i {
+            margin-right: 0.3rem;
+        }
+        .ratings {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .star {
+            color: #ffc107;
+            margin-right: 0.2rem;
+        }
+        .rating-count {
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-left: 0.3rem;
+        }
+        .no-results {
             text-align: center;
+            padding: 3rem;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+        }
+        .pagination-container {
+            margin-top: 2rem;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-{% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} text-center py-2" role="alert">
-                    {{ message }}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center py-2" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="page-header text-center">
+        <h2 class="dashboard-heading">Our Medical Team</h2>
+        <p class="mb-0">Find the right specialist for your healthcare needs</p>
+    </div>
+
+    <div class="search-filter-container">
+        <div class="row">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" id="doctorSearch" class="form-control" placeholder="Search doctors...">
                 </div>
-            {% endfor %}
-        {% endif %}
-    <h2 class="dashboard-heading">Welcome to View Doctor</h2>
-    <p>Manage all registered doctors here.</p>
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+                <select id="specializationFilter" class="form-select">
+                    <option value="">All Specializations</option>
+                    {% for specialization in specializations %}
+                        <option value="{{ specialization }}">{{ specialization }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+                <select id="availabilityFilter" class="form-select">
+                    <option value="">Any Availability</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <div class="d-grid">
+                    <a href="{% url 'add_doctor' %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Add Doctor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{% url 'add_doctor' %}" class="btn btn-primary add-doctor-btn">Add Doctor</a>
-
-    <div class="row">
+    <div class="row" id="doctorsList">
         {% for doctor in doctors %}
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 doctor-item" data-specialization="{{ doctor.specialization }}" data-days="{{ doctor.available_days }}">
             <div class="doctor-card">
-                <img src="{{ doctor.photo.url }}" alt="Doctor Photo" class="doctor-img">
+                <div class="doctor-img-container">
+                    <span class="specialization-badge">{{ doctor.specialization }}</span>
+                    <img src="{{ doctor.photo.url }}" alt="Dr. {{ doctor.name }}" class="doctor-img">
+                </div>
                 <div class="doctor-info">
-                    <p class="doctor-name">Dr.{{ doctor.name }}</p>
-                    <p class="doctor-specialization">{{ doctor.specialization }}</p>
-                    <p class="doctor-experience">Experience: {{ doctor.experience }} years</p>
-                    <p class="doctor-days">Available: {{ doctor.available_days }}</p>
-                    <p class="doctor-timings">
-                        Timings: {{ doctor.start_time|time:"h:i A" }} - {{ doctor.end_time|time:"h:i A" }}
-                    </p>
+                    <h3 class="doctor-name">Dr. {{ doctor.name }}</h3>
+                    
+                    <div class="ratings">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= doctor.average_rating %}
+                                <i class="fas fa-star star"></i>
+                            {% elif forloop.counter <= doctor.average_rating|add:0.5 %}
+                                <i class="fas fa-star-half-alt star"></i>
+                            {% else %}
+                                <i class="far fa-star star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="rating-count">({{ doctor.review_count|default:"0" }} reviews)</span>
+                    </div>
+                    
+                    <div class="doctor-meta">
+                        <i class="fas fa-user-md"></i>
+                        <span>{{ doctor.specialization }}</span>
+                    </div>
+                    
+                    <div class="doctor-meta">
+                        <i class="fas fa-briefcase"></i>
+                        <span>{{ doctor.experience }} years experience</span>
+                    </div>
+                    
+                    <div class="doctor-meta">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>{{ doctor.qualifications|default:"MD" }}</span>
+                    </div>
+                    
+                    <div class="availability-info">
+                        <div class="availability-title">
+                            <i class="far fa-calendar-check"></i> Availability
+                        </div>
+                        <div class="availability-days">
+                            {% for day in doctor.available_days_list %}
+                                <span class="day-badge">{{ day }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="doctor-meta mb-0">
+                            <i class="far fa-clock"></i>
+                            <span>{{ doctor.start_time|time:"h:i A" }} - {{ doctor.end_time|time:"h:i A" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a href="#" class="btn btn-outline-primary card-btn">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="#" class="btn btn-primary card-btn">
+                        <i class="fas fa-user-md"></i> View Profile
+                    </a>
                 </div>
             </div>
         </div>
         {% empty %}
-        <p>No doctors available.</p>
+        <div class="col-12 no-results">
+            <i class="fas fa-user-md fa-3x text-muted mb-3"></i>
+            <h4>No doctors available</h4>
+            <p class="text-muted">No doctors have been added to the system yet.</p>
+            <a href="{% url 'add_doctor' %}" class="btn btn-primary mt-2">
+                <i class="fas fa-plus-circle"></i> Add Your First Doctor
+            </a>
+        </div>
         {% endfor %}
     </div>
+    
+    {% if doctors.has_other_pages %}
+    <div class="pagination-container d-flex justify-content-center">
+        <nav aria-label="Doctor navigation">
+            <ul class="pagination">
+                {% if doctors.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ doctors.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                    </li>
+                {% endif %}
+                
+                {% for num in doctors.paginator.page_range %}
+                    {% if doctors.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if doctors.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ doctors.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('doctorSearch');
+        const specializationFilter = document.getElementById('specializationFilter');
+        const availabilityFilter = document.getElementById('availabilityFilter');
+        const doctorItems = document.querySelectorAll('.doctor-item');
+        
+        function filterDoctors() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const specialization = specializationFilter.value;
+            const availability = availabilityFilter.value;
+            
+            let visibleCount = 0;
+            
+            doctorItems.forEach(item => {
+                const doctorName = item.querySelector('.doctor-name').textContent.toLowerCase();
+                const doctorSpecialization = item.getAttribute('data-specialization');
+                const doctorDays = item.getAttribute('data-days');
+                
+                const matchesSearch = doctorName.includes(searchTerm);
+                const matchesSpecialization = specialization === '' || doctorSpecialization === specialization;
+                const matchesAvailability = availability === '' || doctorDays.includes(availability);
+                
+                if (matchesSearch && matchesSpecialization && matchesAvailability) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Show no results message if needed
+            const noResultsContainer = document.querySelector('.no-results');
+            if (noResultsContainer) {
+                if (visibleCount === 0 && doctorItems.length > 0) {
+                    if (!document.getElementById('no-results-message')) {
+                        const noResultsMsg = document.createElement('div');
+                        noResultsMsg.id = 'no-results-message';
+                        noResultsMsg.className = 'col-12 no-results';
+                        noResultsMsg.innerHTML = `
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h4>No matching doctors found</h4>
+                            <p class="text-muted">Try adjusting your search criteria</p>
+                            <button class="btn btn-outline-primary mt-2" id="resetFilters">
+                                <i class="fas fa-sync"></i> Reset Filters
+                            </button>
+                        `;
+                        document.getElementById('doctorsList').appendChild(noResultsMsg);
+                        
+                        document.getElementById('resetFilters').addEventListener('click', function() {
+                            searchInput.value = '';
+                            specializationFilter.value = '';
+                            availabilityFilter.value = '';
+                            filterDoctors();
+                        });
+                    }
+                } else {
+                    const noResultsMsg = document.getElementById('no-results-message');
+                    if (noResultsMsg) {
+                        noResultsMsg.remove();
+                    }
+                }
+            }
+        }
+        
+        searchInput.addEventListener('input', filterDoctors);
+        specializationFilter.addEventListener('change', filterDoctors);
+        availabilityFilter.addEventListener('change', filterDoctors);
+        
+        // Initialize doctor available_days_list for each doctor
+        doctorItems.forEach(item => {
+            const daysText = item.getAttribute('data-days');
+            if (daysText) {
+                // This assumes available_days is a comma-separated string
+                const daysList = daysText.split(',').map(day => day.trim());
+                item.setAttribute('data-days', daysList.join(','));
+            }
+        });
+        
+        // Add fade effect for alerts
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+</script>
 {% endblock %}

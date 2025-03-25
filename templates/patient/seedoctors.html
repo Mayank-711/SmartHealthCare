@@ -19,6 +19,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
         
         .dashboard-heading {
@@ -109,16 +110,143 @@
             color: #dc3545;
         }
         
+        /* New styles for precautions and urgency level */
+        .precautions-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #17a2b8;
+        }
+        
+        .precautions-heading {
+            color: #17a2b8;
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .precautions-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .precautions-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            color: #495057;
+        }
+        
+        .precautions-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .urgency-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .urgency-heading {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .urgency-meter {
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #e9ecef;
+            margin-bottom: 10px;
+        }
+        
+        .urgency-level {
+            height: 100%;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            transition: width 0.5s ease;
+        }
+        
+        .urgency-level-0 {
+            background-color: #28a745;
+            width: 10%;
+        }
+        
+        .urgency-level-1 {
+            background-color: #17a2b8;
+            width: 20%;
+        }
+        
+        .urgency-level-2 {
+            background-color: #007bff;
+            width: 40%;
+        }
+        
+        .urgency-level-3 {
+            background-color: #ffc107;
+            width: 60%;
+        }
+        
+        .urgency-level-4 {
+            background-color: #fd7e14;
+            width: 80%;
+        }
+        
+        .urgency-level-5 {
+            background-color: #dc3545;
+            width: 100%;
+        }
+        
+        .urgency-description {
+            font-size: 16px;
+            color: #495057;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 class="dashboard-heading">Recommended Doctors</h2>
+    <h2 class="dashboard-heading">Disease Assessment</h2>
 
     {% if diseases %}
         <p class="disease-info">Predicted Disease(s): {{ diseases|join:", " }}</p>
     {% endif %}
+    
+    <!-- New Urgency Level Section -->
+    <div class="urgency-container">
+        <h3 class="urgency-heading">Urgency Level</h3>
+        <div class="urgency-meter">
+            <div class="urgency-level urgency-level-{{ urgency_level }}">
+                {{ urgency_level }}
+            </div>
+        </div>
+        <div class="urgency-description">
+            <strong>Recommendation:</strong> {{ urgency_description }}
+        </div>
+    </div>
+    
+    <!-- New Precautions Section -->
+    <div class="precautions-container">
+        <h3 class="precautions-heading">Recommended Precautions</h3>
+        <ul class="precautions-list">
+            {% for precaution in precautions %}
+                <li>{{ precaution }}</li>
+            {% empty %}
+                <li>No specific precautions recommended at this time.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="dashboard-heading">Recommended Doctors</h2>
 
     <div class="doctor-container">
         {% for doctor in doctors %}
@@ -136,14 +264,9 @@
                 </div>
             </div>
         </div>
-    {% empty %}
-        <p class="text-center">No doctors available for the predicted disease.</p>
-    {% endfor %}
-    
-
-        {% comment %} {% if not doctors %}
+        {% empty %}
             <p class="text-center">No doctors available for the predicted disease.</p>
-        {% endif %} {% endcomment %}
+        {% endfor %}
     </div>
 </div>
 

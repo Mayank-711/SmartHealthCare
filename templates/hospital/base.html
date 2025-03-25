@@ -10,14 +10,102 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            transition: all 0.3s ease;
         }
+        
+        /* Navbar Styling */
+        .navbar {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            padding: 0.8rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-dark {
+            background: linear-gradient(135deg, #2c3e50, #1a2533) !important;
+        }
+        
         .navbar-brand {
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.7rem;
+            color: #3498db !important;
+            letter-spacing: -0.5px;
+            padding: 0.25rem 0;
+            position: relative;
+            transition: all 0.3s ease;
         }
+        
+        .navbar-brand:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #2ecc71;
+            transition: width 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+        
+        .navbar-brand:hover:after {
+            width: 100%;
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .navbar-brand:hover {
+            animation: pulse 1s infinite;
+        }
+        
+        .nav-item {
+            margin: 0 0.15rem;
+            position: relative;
+        }
+        
         .nav-item a {
             font-weight: 500;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .nav-item a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(.42,0,.58,1);
+            z-index: -1;
+        }
+        
+        .nav-item a:hover:before {
+            left: 0;
+        }
+        
+        .nav-item a:hover {
+            color: #fff;
+        }
+        
+        .nav-item a.active {
+            background-color: rgba(255,255,255,0.15);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
     </style>
 
@@ -35,16 +123,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'view_doctor' %}">View Doctor</a>
+                    <a class="nav-link {% if request.path == '/view_doctor/' %}active{% endif %}" href="{% url 'view_doctor' %}">View Doctor</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'appointments' %}">Appointments</a>
+                    <a class="nav-link {% if request.path == '/appointments/' %}active{% endif %}" href="{% url 'appointments' %}">Appointments</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    <a class="nav-link {% if request.path == '/logout/' %}active{% endif %}" href="{% url 'logout' %}">Logout</a>
                 </li>
             </ul>
         </div>

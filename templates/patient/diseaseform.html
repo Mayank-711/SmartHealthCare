@@ -3,102 +3,679 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disease Form - Smart Health Care</title>
+    <title>Disease Prediction - Smart Health Care</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2b6cb0;
+            --secondary-color: #4299e1;
+            --accent-color: #3182ce;
+            --success-color: #38a169;
+            --light-color: #f7fafc;
+            --dark-color: #1a202c;
+        }
+        
         body {
-            background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
-            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f6f9fc, #e6f2ff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 60px;
         }
-        .container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-in-out;
+        
+        .header-banner {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .form-label {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #007bff;
-        }
-        .btn-submit {
+        
+        .header-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: 0.3s;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M95,45 L95,55 C95,75 75,95 55,95 L45,95 C25,95 5,75 5,55 L5,45 C5,25 25,5 45,5 L55,5 C75,5 95,25 95,45 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/></svg>');
+            background-size: 150px;
+            opacity: 0.3;
         }
-        .btn-submit:hover {
-            background-color: #28a745;
-            transform: scale(1.05);
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
-        .footer {
+        
+        .announcement-banner {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: -20px auto 30px;
+            max-width: 800px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .announcement-content {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .announcement-icon {
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.25rem;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        .form-container:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 8px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(-5px);
+        }
+        
+        .form-header {
             text-align: center;
-            padding: 10px;
-            background: #000;
-            color: #fff;
-            margin-top: 30px;
-            font-weight: bold;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
         }
-        .marquee-text {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: red;
-            background: yellow;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+        
+        .form-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
         }
+        
+        .form-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.75rem;
+            margin-bottom: 10px;
+        }
+        
+        .form-subtitle {
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .input-section {
+            background-color: #f9fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-label i {
+            margin-right: 8px;
+        }
+        
+        .form-control {
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+        
+        .example-text {
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 0 8px 8px 0;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-record {
+            background-color: #e53e3e;
+            border: none;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-record:hover {
+            background-color: #c53030;
+            transform: translateY(-2px);
+        }
+        
+        .btn-submit {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            flex: 2;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .recording-status {
+            background-color: #ebf8ff;
+            border: 1px solid #bee3f8;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .recording-animation {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #e53e3e;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        
+        .health-tips-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .tips-header {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .tips-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .tips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .tip-card {
+            flex: 1;
+            min-width: 180px;
+            max-width: 250px;
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid;
+        }
+        
+        .tip-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tip-card.water { border-color: #4299e1; }
+        .tip-card.food { border-color: #ecc94b; }
+        .tip-card.exercise { border-color: #f56565; }
+        .tip-card.sleep { border-color: #9f7aea; }
+        .tip-card.hygiene { border-color: #48bb78; }
+        
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .tip-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .footer {
+            background: linear-gradient(90deg, #2d3748, #1a202c);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
+            70% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+            100% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .tips-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tip-card {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- Flashy Kachra: Moving Text -->
-    <marquee behavior="scroll" direction="left" scrollamount="10">
-        <span class="marquee-text">🚑 24/7 Emergency Care Available! 💉 Free Online Consultation for First-time Users! 🏥</span>
-    </marquee>
-
-    <!-- Disease Form -->
-    <div class="container">
-        <h2 class="text-center mb-4" style="color: #ff4500; font-weight: bold;">
-            🤒 Disease Prediction Form 💊
-        </h2>
-        <p class="text-center text-success fw-bold">Get instant AI-based diagnosis and expert recommendations! 🚀</p>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label">Enter Your Details 👇</label>
-                <textarea class="form-control" name="user_input" rows="4" placeholder="Mention your Gender, Age, and Problem" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-submit">🔍 Submit & Get Diagnosis</button>
-        </form>
-        
+    <!-- Header Banner -->
+    <div class="header-banner">
+        <div class="container header-content">
+            <h1 class="text-center mb-0">
+                <i class="fas fa-heartbeat"></i> Smart Health Care
+            </h1>
+        </div>
     </div>
 
-    <!-- More Kachra: Random Healthcare Tips -->
-    <div class="text-center mt-4">
-        <h3 style="color: #dc3545;">🩺 Health Tips of the Day 🏋️‍♂️</h3>
-        <ul class="list-group w-50 mx-auto">
-            <li class="list-group-item list-group-item-success">Drink 8 glasses of water daily! 💧</li>
-            <li class="list-group-item list-group-item-warning">Avoid junk food, eat fresh! 🍏</li>
-            <li class="list-group-item list-group-item-danger">Exercise for at least 30 minutes! 🏃</li>
-            <li class="list-group-item list-group-item-info">Sleep for 7-8 hours! 💤</li>
-            <li class="list-group-item list-group-item-primary">Wash hands frequently! 🧼</li>
-        </ul>
+    <!-- Announcement Banner -->
+    <div class="container">
+        <div class="announcement-banner">
+            <div class="announcement-content">
+                <div class="announcement-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="announcement-text">
+                    <marquee behavior="scroll" direction="left" scrollamount="5">
+                        🚑 24/7 Emergency Care Available! &nbsp;&nbsp;|&nbsp;&nbsp; 💉 Free Online Consultation for First-time Users! &nbsp;&nbsp;|&nbsp;&nbsp; 🏥 New AI Diagnosis System Now Live!
+                    </marquee>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="row">
+            <!-- Disease Form -->
+            <div class="col-lg-8 mx-auto">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 class="form-title">
+                            <i class="fas fa-stethoscope"></i> Disease Prediction
+                        </h2>
+                        <p class="form-subtitle">Get AI-powered diagnosis and expert recommendations</p>
+                    </div>
+                    
+                    <!-- Show error message if any -->
+                    {% if error %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="input-section">
+                            <label class="form-label">
+                                <i class="fas fa-user-md"></i> Enter Your Symptoms & Details
+                            </label>
+                            <textarea class="form-control" name="user_input" rows="4" placeholder="Describe your symptoms, age, gender, and medical history" required></textarea>
+                            
+                            <div class="example-text">
+                                <i class="fas fa-lightbulb me-2"></i><strong>Example:</strong> "I am a 45-year-old male experiencing chest pain and shortness of breath for the past 2 days. I have a history of high blood pressure."
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button id="start-recording" type="button" class="btn btn-record">
+                                <i class="fas fa-microphone"></i> Start Voice Input
+                            </button>
+                            <button type="submit" class="btn btn-submit">
+                                <i class="fas fa-search"></i> Analyze Symptoms
+                            </button>
+                        </div>
+                        
+                        <!-- Recording status indicator (hidden by default) -->
+                        <div id="recording-status" class="recording-status d-none">
+                            <div class="recording-animation"></div>
+                            <span><strong>Listening...</strong> Please speak clearly about your symptoms.</span>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Health Tips Section -->
+                <div class="health-tips-section">
+                    <h3 class="tips-header">
+                        <i class="fas fa-thumbs-up"></i> Daily Health Tips
+                    </h3>
+                    
+                    <div class="tips-container">
+                        <div class="tip-card water">
+                            <span class="tip-icon">💧</span>
+                            <p class="tip-text">Drink 8 glasses of water daily for optimal hydration</p>
+                        </div>
+                        <div class="tip-card food">
+                            <span class="tip-icon">🍏</span>
+                            <p class="tip-text">Choose fresh fruits & vegetables over processed foods</p>
+                        </div>
+                        <div class="tip-card exercise">
+                            <span class="tip-icon">🏃</span>
+                            <p class="tip-text">Exercise for at least 30 minutes daily</p>
+                        </div>
+                        <div class="tip-card sleep">
+                            <span class="tip-icon">💤</span>
+                            <p class="tip-text">Get 7-8 hours of quality sleep each night</p>
+                        </div>
+                        <div class="tip-card hygiene">
+                            <span class="tip-icon">🧼</span>
+                            <p class="tip-text">Wash hands frequently to prevent infections</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        &copy; 2025 SmartHealthCare™ | Your AI Doctor 🤖 | All Rights Reserved
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <p class="mb-0">
+                        &copy; 2025 SmartHealthCare™ | Your AI Doctor <i class="fas fa-robot"></i> | All Rights Reserved
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById("start-recording").addEventListener("click", function(event) {
+            event.preventDefault();
+            
+            // Microphone check and instructions
+            const instructionsDiv = document.createElement("div");
+            instructionsDiv.className = "alert alert-info mt-2 mb-2";
+            instructionsDiv.innerHTML = `
+                <h5>📢 Microphone Instructions:</h5>
+                <ol>
+                    <li>Make sure your microphone is connected and enabled</li>
+                    <li>Allow microphone access when prompted by the browser</li>
+                    <li>Speak clearly and at a normal volume</li>
+                    <li>Speak after the "Listening..." message appears</li>
+                    <li>Click "Stop Recording" when finished</li>
+                </ol>
+            `;
+            
+            // Insert instructions before recording
+            const form = document.querySelector("form");
+            form.insertBefore(instructionsDiv, document.getElementById("recording-status"));
+            
+            // Countdown timer for user preparation (3 seconds)
+            let countdown = 3;
+            const countdownDiv = document.createElement("div");
+            countdownDiv.className = "alert alert-warning text-center";
+            countdownDiv.innerHTML = `<h3>Preparing microphone... ${countdown}</h3>`;
+            form.insertBefore(countdownDiv, instructionsDiv);
+            
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownDiv.innerHTML = `<h3>Preparing microphone... ${countdown}</h3>`;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownDiv.remove();
+                    startRecording();
+                }
+            }, 1000);
+            
+            function startRecording() {
+                // Create a stop recording button
+                const button = document.getElementById("start-recording");
+                button.disabled = true;
+                
+                const stopButton = document.createElement("button");
+                stopButton.id = "stop-recording";
+                stopButton.className = button.className; // Copy the same classes
+                stopButton.innerHTML = "⏹️ Stop Recording";
+                button.parentNode.insertBefore(stopButton, button.nextSibling);
+                
+                // Show recording status
+                const statusElement = document.getElementById("recording-status");
+                statusElement.classList.remove("d-none");
+                statusElement.innerHTML = `
+                    <div class="recording-animation"></div>
+                    <strong>Listening...</strong> Please speak clearly. Take pauses as needed. Click "Stop Recording" when finished.
+                `;
+                
+                // Initialize SpeechRecognition
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                
+                if (!SpeechRecognition) {
+                    showMessage("Speech recognition is not supported in your browser. Try Chrome instead.", "warning");
+                    resetUI();
+                    return;
+                }
+                
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'en-US'; // Set language
+                recognition.continuous = true; // Allow continuous recording
+                recognition.interimResults = true; // Get results as they come in
+                
+                // Get the textarea where results will be displayed
+                const textarea = document.querySelector("textarea[name='user_input']");
+                let finalTranscript = ''; // Store the final transcript
+                
+                // Process speech recognition results
+                recognition.onresult = function(event) {
+                    let interimTranscript = '';
+                    
+                    // Collect results
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript + ' ';
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+                    
+                    // Update textarea with both final and interim results
+                    textarea.value = finalTranscript + interimTranscript;
+                    
+                    // Scroll to bottom of textarea
+                    textarea.scrollTop = textarea.scrollHeight;
+                };
+                
+                // Handle errors
+                recognition.onerror = function(event) {
+                    console.error("Recognition error:", event.error);
+                    showMessage(`Error: ${event.error}`, "danger");
+                    if (event.error === 'no-speech') {
+                        // Don't stop if no speech is detected, just wait for more input
+                        return;
+                    }
+                    recognition.stop();
+                    showTroubleshootingTips();
+                };
+                
+                // Keep recognition going if it ends
+                recognition.onend = function() {
+                    // Only restart if we haven't clicked stop
+                    if (!stopButton.disabled) {
+                        recognition.start();
+                    }
+                };
+                
+                // Start recognition
+                recognition.start();
+                
+                // Handle stop button click
+                stopButton.addEventListener("click", function() {
+                    recognition.stop();
+                    stopButton.disabled = true;
+                    resetUI();
+                    showMessage("Voice input captured successfully!", "success");
+                });
+                
+                function resetUI() {
+                    // Remove stop button
+                    if (stopButton.parentNode) {
+                        stopButton.parentNode.removeChild(stopButton);
+                    }
+                    
+                    // Reset original button
+                    button.disabled = false;
+                    button.innerHTML = "🎤 Start Recording";
+                    
+                    // Hide status and instructions
+                    statusElement.classList.add("d-none");
+                    instructionsDiv.remove();
+                }
+            }
+        });
+        
+        // Helper function to show messages
+        function showMessage(message, type) {
+            // Create alert element
+            const alertDiv = document.createElement("div");
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            // Insert after the form
+            const form = document.querySelector("form");
+            form.parentNode.insertBefore(alertDiv, form.nextSibling);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 5000);
+        }
+        
+        // Function to show troubleshooting tips when speech recognition fails
+        function showTroubleshootingTips() {
+            const tipsDiv = document.createElement("div");
+            tipsDiv.className = "alert alert-warning mt-3";
+            tipsDiv.innerHTML = `
+                <h5>🔧 Troubleshooting Tips:</h5>
+                <ul>
+                    <li>Make sure your microphone is properly connected</li>
+                    <li>Check browser permissions (look for microphone icon in address bar)</li>
+                    <li>Speak louder and more clearly</li>
+                    <li>Reduce background noise</li>
+                    <li>Try using Chrome browser (best support for speech recognition)</li>
+                    <li>If using a headset, ensure it's selected as the input device</li>
+                    <li>Try typing your symptoms instead if voice input continues to fail</li>
+                </ul>
+            `;
+            
+            const form = document.querySelector("form");
+            form.appendChild(tipsDiv);
+            
+            // Remove tips after 15 seconds
+            setTimeout(() => {
+                if (tipsDiv.parentNode) {
+                    tipsDiv.parentNode.removeChild(tipsDiv);
+                }
+            }, 15000);
+        }
+    </script>
 </body>
 </html>
