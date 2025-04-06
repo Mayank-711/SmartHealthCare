@@ -43,8 +43,14 @@ def add_doctor(request):
     return render(request, "hospital/add_doctor.html")
 
 
+from patient.models import Appointment
+
 def appointments(request):
-    return render(request,'hospital/appointments.html')
+    all_appointments = Appointment.objects.select_related('doctor').order_by('-created_at')
+    return render(request, 'hospital/appointments.html', {
+        'appointments': all_appointments
+    })
+
 
 @login_required
 def dashboard(request):

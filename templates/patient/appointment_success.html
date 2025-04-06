@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointment Success</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f7;
+            font-family: Arial, sans-serif;
+        }
+        .success-container {
+            margin-top: 100px;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .success-heading {
+            color: #28a745;
+            font-size: 2rem;
+        }
+        .btn-primary-custom {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .btn-primary-custom:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-container">
+            <h1 class="success-heading">🎉 Appointment Booked Successfully!</h1>
+            <p>Your appointment has been booked successfully. We will contact you with further details.</p>
+            <a href="{% url 'diseaseform' %}" class="btn btn-primary-custom mt-3">Go back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

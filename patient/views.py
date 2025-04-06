@@ -263,11 +263,10 @@ def get_nearest_doctors(specializations):
 
 def seedoctors(request):
     diseases = request.session.get("diseases", [])
-    doctors = request.session.get("doctors", [])  # List of doctor objects
+    doctor_dicts = request.session.get("doctors", [])
     precautions = request.session.get("precautions", [])
-    urgency_level = request.session.get("urgency_level", 0)  # Default to level 1 if not provided
-    
-    # Define urgency level descriptions for the template
+    urgency_level = request.session.get("urgency_level", 0)
+
     urgency_descriptions = {
         0: "Self-care only (no doctor visit needed)",
         1: "Schedule a routine appointment (within the next few weeks)",
@@ -276,11 +275,18 @@ def seedoctors(request):
         4: "Seek medical attention promptly (within 24 hours)",
         5: "Emergency (immediate medical attention required)"
     }
-    
-    # Get the description for the current urgency level
+
     urgency_description = urgency_descriptions.get(urgency_level, "Schedule a routine appointment")
 
-    # Clear session data after retrieving
+    # ✅ Attach the doctor ID using name lookup
+    for doc in doctor_dicts:
+        try:
+            doctor = Doctor.objects.get(name=doc["name"])
+            doc["id"] = doctor.id
+        except Doctor.DoesNotExist:
+            doc["id"] = None  # or skip / handle as needed
+
+    # Clear session if needed
     request.session.pop("diseases", None)
     request.session.pop("doctors", None)
     request.session.pop("precautions", None)
@@ -290,10 +296,107 @@ def seedoctors(request):
         request,
         "patient/seedoctors.html",
         {
-            "diseases": diseases, 
-            "doctors": doctors,
+            "diseases": diseases,
+            "doctors": doctor_dicts,  # contains 'id' now
             "precautions": precautions,
             "urgency_level": urgency_level,
             "urgency_description": urgency_description
         },
     )
+
+
+from datetime import datetime, timedelta, date
+from .models import Appointment
+from hospital.models import Doctor
+
+CONSULTATION_TIMES = {
+    "Cardiologist": 15,
+    "Dentist": 10,
+    "Dermatologist": 5,
+    "Endocrinologist": 10,
+    "ENT Specialist": 10,
+    "Gastroenterologist": 10,
+    "General Physician": 10,
+    "Geriatrician": 15,
+    "Gynecologist": 10,
+    "Hematologist": 10,
+    "Immunologist": 10,
+    "Infectious Disease Specialist": 15,
+    "Nephrologist": 10,
+    "Neurologist": 15,
+    "Oncologist": 15,
+    "Ophthalmologist": 10,
+    "Orthopedic Surgeon": 10,
+    "Pediatrician": 10,
+    "Physiotherapist": 10,
+    "Plastic Surgeon": 20,
+    "Psychiatrist": 15,
+    "Pulmonologist": 10,
+    "Radiologist": 5,
+    "Rheumatologist": 10,
+    "Sports Medicine Specialist": 10,
+    "Urologist": 10
+}
+
+def book_appointment(request, doctor_id):
+    doctor = Doctor.objects.get(id=doctor_id)
+    specialization = doctor.specialization
+    consultation_time = CONSULTATION_TIMES.get(specialization, 10)
+
+    # Combine today's date with the doctor's start and end times
+    start = datetime.combine(date.today(), doctor.start_time)
+    end = datetime.combine(date.today(), doctor.end_time)
+
+    slots = []
+    current = start
+    gap = timedelta(hours=1)
+    while current < end:
+        time_str = current.strftime("%H:%M")
+        existing = Appointment.objects.filter(
+            doctor=doctor,
+            appointment_time=time_str,
+            is_completed=False
+        ).count()
+        waiting_time = existing * consultation_time
+        slots.append({
+            "time": time_str,
+            "waiting_time": waiting_time
+        })
+        current += gap
+
+    if request.method == "POST":
+        patient_name = request.POST.get("patient_name")
+        patient_contact = request.POST.get("patient_contact")
+        appointment_time = request.POST.get("appointment_time")
+
+        # Recount waiting time at submission
+        existing_appointments = Appointment.objects.filter(
+            doctor=doctor,
+            appointment_time=appointment_time,
+            is_completed=False,
+        )
+        waiting_time = existing_appointments.count() * consultation_time
+
+        Appointment.objects.create(
+            doctor=doctor,
+            patient_name=patient_name,
+            patient_contact=patient_contact,
+            appointment_time=appointment_time,
+            waiting_time=waiting_time
+        )
+
+        return render(
+            request,
+            "patient/appointment_success.html",
+            {"waiting_time": waiting_time}
+        )
+
+    return render(request, "patient/book_appointment.html", {
+        "doctor": doctor,
+        "slots": slots
+    })
+
+
+
+def appointment_success(request):
+    return render(request, 'patient/appointment_success.html')

@@ -29,6 +29,8 @@ patient_Url = [
     path('',pviews.landingpage,name='landingpage'),
     path('diseaseform/',pviews.diseaseform,name='diseaseform'),
     path("seedoctors/", pviews.seedoctors, name="seedoctors"), 
+    path('book-appointment/<int:doctor_id>/', pviews.book_appointment, name='book_appointment'),
+    path('appointment-success/', pviews.appointment_success, name='appointment_success'),
 ]
 
 hospital_url = [

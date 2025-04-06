@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - SmartHealth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d62d0;
+            --success: #34a853;
+            --danger: #ea4335;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --secondary: #6c757d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .appointment-container {
+            padding: 30px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .error-message {
+            color: var(--danger);
+            background-color: rgba(234, 67, 53, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            border-left: 4px solid var(--danger);
+        }
+        
+        form label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        form input, 
+        form select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 16px;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        form input:focus, 
+        form select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+        }
+        
+        form select option {
+            padding: 10px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .back-btn i {
+            margin-right: 8px;
+        }
+        
+        .back-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .book-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3);
+        }
+        
+        .book-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 115, 232, 0.4);
+        }
+        
+        .doctor-info {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .doctor-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e1e5eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 24px;
+        }
+        
+        .doctor-details h3 {
+            margin: 0 0 5px 0;
+            color: var(--dark);
+            font-size: 18px;
+        }
+        
+        .doctor-details p {
+            margin: 0;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+            }
+            
+            .appointment-container {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .back-btn, .book-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="appointment-container">
+            <h2>Book Appointment with Dr. {{ doctor.name }}</h2>
+
+            <div class="doctor-info">
+                <div class="doctor-avatar">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="doctor-details">
+                    <h3>Dr. {{ doctor.name }}</h3>
+                    <p>{{ doctor.specialization }}</p>
+                </div>
+            </div>
+
+            {% if error %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label for="patient_name">Your Name:</label>
+                <input type="text" id="patient_name" name="patient_name" required placeholder="Enter your full name">
+
+                <label for="patient_contact">Contact Info:</label>
+                <input type="text" id="patient_contact" name="patient_contact" required placeholder="Enter your phone number">
+
+                <label for="appointment_time">Select Time Slot:</label>
+                <select id="appointment_time" name="appointment_time" required>
+                    {% for slot in slots %}
+                        <option value="{{ slot.time }}">
+                            {{ slot.time }} (Waiting: {{ slot.waiting_time }} mins)
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <div class="button-group">
+                    <a href="javascript:history.back()" class="back-btn">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="book-btn">
+                        <i class="fas fa-calendar-check"></i> Book Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -4,73 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>See Doctors - SmartHealth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a73e8;
+            --success: #34a853;
+            --warning: #fbbc05;
+            --danger: #ea4335;
+            --info: #4285f4;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --secondary: #6c757d;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
             margin: 0;
             padding: 20px;
+            color: #333;
+            line-height: 1.6;
         }
         
         .container {
-            max-width: 1100px;
-            margin: auto;
+            max-width: 1200px;
+            margin: 25px auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .container:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
         }
         
         .dashboard-heading {
-            color: #007bff;
-            font-size: 26px;
-            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 32px;
+            margin-bottom: 25px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .dashboard-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
         }
         
         .disease-info {
             text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #28a745;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 25px 0;
+            color: var(--success);
+            background-color: rgba(52, 168, 83, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid var(--success);
         }
         
         .doctor-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+            gap: 25px;
             justify-content: center;
             align-items: stretch;
+            margin-top: 30px;
         }
         
         .doctor-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
+            border: none;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
             background: #fff;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
+            padding: 25px;
+            position: relative;
         }
         
         .doctor-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: contain;
-            border-radius: 10px;
-            background-color: #f8f9fa;
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #f0f7ff;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
         
         .doctor-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .doctor-card:hover .doctor-img {
+            border-color: rgba(26, 115, 232, 0.2);
         }
         
         .doctor-info {
@@ -79,51 +124,85 @@
         }
         
         .doctor-name {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
         }
         
         .doctor-specialization {
-            font-size: 16px;
-            color: #007bff;
+            font-size: 17px;
+            color: var(--primary);
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            padding: 5px 15px;
+            background-color: rgba(26, 115, 232, 0.1);
+            border-radius: 20px;
+            display: inline-block;
         }
         
         .doctor-experience {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 5px;
+            font-size: 16px;
+            color: var(--secondary);
+            margin-bottom: 12px;
         }
         
         .doctor-days {
-            font-size: 14px;
-            font-weight: bold;
-            color: #28a745;
-            margin-bottom: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 12px;
         }
         
         .doctor-timings {
-            font-size: 14px;
-            color: #dc3545;
+            font-size: 16px;
+            color: var(--danger);
+            margin-bottom: 20px;
         }
         
-        /* New styles for precautions and urgency level */
+        .book-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3);
+        }
+        
+        .book-btn:hover {
+            background-color: #0d62d0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(26, 115, 232, 0.4);
+        }
+        
+        /* Enhanced styles for precautions and urgency level */
         .precautions-container {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 30px;
+            padding: 25px;
             background-color: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #17a2b8;
+            border-radius: 16px;
+            border-left: 6px solid var(--info);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .precautions-heading {
-            color: #17a2b8;
-            font-size: 20px;
-            margin-bottom: 10px;
-            font-weight: bold;
+            color: var(--info);
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .precautions-heading::before {
+            content: '\f06a';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 10px;
+            font-size: 22px;
         }
         
         .precautions-list {
@@ -132,9 +211,26 @@
         }
         
         .precautions-list li {
-            padding: 8px 0;
+            padding: 12px 15px;
             border-bottom: 1px solid #e9ecef;
             color: #495057;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .precautions-list li::before {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 10px;
+            color: var(--info);
+        }
+        
+        .precautions-list li:hover {
+            background-color: rgba(66, 133, 244, 0.05);
         }
         
         .precautions-list li:last-child {
@@ -142,33 +238,64 @@
         }
         
         .urgency-container {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 16px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .urgency-heading {
-            font-size: 20px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #495057;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .urgency-heading::before {
+            content: '\f0f1';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 10px;
+            font-size: 22px;
         }
         
         .urgency-meter {
-            height: 30px;
-            border-radius: 15px;
+            height: 40px;
+            border-radius: 20px;
             overflow: hidden;
             background-color: #e9ecef;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
         }
         
         .urgency-level {
             height: 100%;
             color: white;
             text-align: center;
-            line-height: 30px;
-            font-weight: bold;
-            transition: width 0.5s ease;
+            line-height: 40px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: width 0.8s ease-in-out;
+            position: relative;
+        }
+        
+        .urgency-level::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 100%);
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         .urgency-level-0 {
@@ -202,11 +329,38 @@
         }
         
         .urgency-description {
-            font-size: 16px;
+            font-size: 17px;
             color: #495057;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+            line-height: 1.7;
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: var(--secondary);
+            font-size: 18px;
+            background-color: var(--light);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .doctor-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .doctor-img {
+                width: 150px;
+                height: 150px;
+            }
         }
     </style>
 </head>
@@ -219,7 +373,7 @@
         <p class="disease-info">Predicted Disease(s): {{ diseases|join:", " }}</p>
     {% endif %}
     
-    <!-- New Urgency Level Section -->
+    <!-- Enhanced Urgency Level Section -->
     <div class="urgency-container">
         <h3 class="urgency-heading">Urgency Level</h3>
         <div class="urgency-meter">
@@ -232,7 +386,7 @@
         </div>
     </div>
     
-    <!-- New Precautions Section -->
+    <!-- Enhanced Precautions Section -->
     <div class="precautions-container">
         <h3 class="precautions-heading">Recommended Precautions</h3>
         <ul class="precautions-list">
@@ -250,22 +404,30 @@
 
     <div class="doctor-container">
         {% for doctor in doctors %}
-        <div class="col-md-4 mb-4">
-            <div class="doctor-card">
-                <img src="{{ doctor.photo }}" alt="Doctor Photo" class="doctor-img">
-                <div class="doctor-info">
-                    <p class="doctor-name">Dr. {{ doctor.name }}</p>
-                    <p class="doctor-specialization">{{ doctor.specialization }}</p>
-                    <p class="doctor-experience">Experience: {{ doctor.experience }} years</p>
-                    <p class="doctor-days">Available: {{ doctor.available_days }}</p>
-                    <p class="doctor-timings">
-                        Timings: {{ doctor.start_time }} - {{ doctor.end_time }}
-                    </p>
-                </div>
+        <div class="doctor-card">
+            <img src="{{ doctor.photo }}" alt="Doctor Photo" class="doctor-img">
+            <div class="doctor-info">
+                <p class="doctor-name">Dr. {{ doctor.name }}</p>
+                <p class="doctor-specialization">{{ doctor.specialization }}</p>
+                <p class="doctor-experience">
+                    <i class="fas fa-user-md"></i> Experience: {{ doctor.experience }} years
+                </p>
+                <p class="doctor-days">
+                    <i class="fas fa-calendar-check"></i> Available: {{ doctor.available_days }}
+                </p>
+                <p class="doctor-timings">
+                    <i class="fas fa-clock"></i> Timings: {{ doctor.start_time }} - {{ doctor.end_time }}
+                </p>
+                <a href="{% url 'book_appointment' doctor.id %}" class="book-btn">
+                    <i class="fas fa-calendar-plus"></i> Book Appointment
+                </a>
             </div>
         </div>
         {% empty %}
-            <p class="text-center">No doctors available for the predicted disease.</p>
+            <p class="empty-message">
+                <i class="fas fa-user-md fa-3x" style="color: #6c757d; margin-bottom: 15px;"></i>
+                <br>No doctors available for the predicted disease.
+            </p>
         {% endfor %}
     </div>
 </div>
